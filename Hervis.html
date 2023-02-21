@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="description" content="Check items which different than others..">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Molnár István || Мельник Степан">
+  <meta name="keywords" content="">
+  <meta name="theme-color" content="#050">
+  <link rel="icon" type="https://www.hervis.hu/shop/favicon.ico" href="favicon.ico">
+  <title>Item difference Hervis</title>
+  <style rel="stylesheet" type="text/css">
+    *:root {
+      font-size: 16px;
+    }
+
+    * {
+      margin: 1vh auto 0;
+      box-sizing: border-box;
+      font-family: 'times new roman';
+      font-weight: 900;
+    }
+
+    body#main {
+      background: #000;
+      padding: 0;
+      margin: 0;
+    }
+
+    #hervisLogo {
+      width: 8vw;
+      display: block;
+      margin-top: 0;
+      transition: all 4s linear;
+    }
+
+    nav {}
+
+    form {
+      display: inline-block;
+      width: 100%;
+    }
+
+    .clearfix {
+      display: table;
+      content: '';
+      clear: both;
+    }
+
+    form>* {
+      float: left;
+    }
+
+    input,
+    input::placeholder {
+      font-size: 1.5rem;
+      text-indent: 8px;
+    }
+
+    input {
+      cursor: pointer;
+      display: block;
+      height: 32px;
+      margin: 0;
+      width: calc(100% / 5);
+      border: 1px outset #900;
+      padding: 0;
+      border-radius: 4px;
+      background: #f90;
+    }
+
+    input::placeholder {
+      letter-spacing: 1px;
+    }
+
+    input:focus {
+      outline: 2px dashed yellow;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    #loadBtn {
+      display: block;
+      width: 50%;
+      zoom: 2;
+      position: relative;
+      background: #090;
+      border-radius: 8px;
+      overflow: hidden hidden;
+      padding: 2px;
+      font-size: 1rem;
+    }
+
+    #loadLineInBtn {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: #0f09;
+      height: 100%;
+      width: 0%;
+      z-index: 9;
+      margin: 0;
+      animatio: loadLine 4s infinite ease-in-out;
+    }
+
+    @keyframes loadLine {
+      0% {
+        width: 0%;
+        opacity: 1;
+      }
+
+      40% {
+        width: 100%;
+        opacity: 1;
+      }
+
+      100% {
+        width: 100%;
+        opacity: 0;
+      }
+    }
+
+    section {
+      width: calc(100% - 2px);
+      height: 95vh;
+      border: 1px green solid;
+      border-radius: 4px;
+    }
+
+    section>iframe {
+      float: left;
+      width: calc(100% / 5);
+      height: 100%;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body id="main">
+  <img id="hervisLogo" src="https://www.hervis.hu/shop/assets/icons/hervis.svg" alt="image of Hervis logo">
+  <nav>
+    <form class="clearfix">
+      <input type="number" min="0" max="3999999" placeholder="Cikkszám" ondblclick="this.value='';">
+      <input type="number" min="0" max="3999999" placeholder="Cikkszám" ondblclick="this.value='';">
+      <input type="number" min="0" max="3999999" placeholder="Cikkszám" ondblclick="this.value='';">
+      <input type="number" min="0" max="3999999" placeholder="Cikkszám" ondblclick="this.value='';">
+      <input type="number" min="0" max="3999999" placeholder="Cikkszám" ondblclick="this.value='';">
+    </form>
+    <button id="loadBtn" type="button" onclick="loadAnim(this)">Betölt
+      <span id="loadLineInBtn"></span>
+    </button>
+  </nav>
+  <section id="embed">
+  </section>
+  <script type="text/javascript">
+    console.clear();
+    console.log(new Date());
+    const baseURL = 'https://www.hervis.hu/shop/p/';
+    let loadAnim = (el) => {
+      const time = 3;
+      el.children[0].style.animation = 'loadLine ' + time + 's infinite cubic-bezier(.1, 0, 0, 1)';
+      window.setTimeout(() => {
+        el.children[0].style.animation = 'none';
+      }, (time * 1000));
+    }
+
+    let loadButton = () => {
+      document.getElementById('embed').innerHTML = '';
+      let inputs = document.getElementsByTagName('INPUT'),
+        len = inputs.length,
+        arrayOfInputValues = [];
+      for (let a = 0; a < len; a++) {
+        if (inputs[a].value.length == 7) {
+          arrayOfInputValues.push(inputs[a].value);
+        }
+      }
+      let arrInsLen = arrayOfInputValues.length,
+        widthPercent = 100 / arrInsLen;
+      for (let b = 0; b < arrInsLen; b++) {
+        let iframe = document.createElement('IFRAME');
+        iframe.src = baseURL + arrayOfInputValues[b];
+        iframe.style.width = widthPercent + '%';
+        document.getElementById('embed').appendChild(iframe);
+      }
+      if (arrInsLen === 0) {
+        window.alert('Nem adtál meg egy helyes cikkszámot se!\nKövetelmények:\nPontosan 7 számjegy;\n2-essel vagy 3-sal kell kezdődnie;');
+      }
+    }
+    document.getElementById('loadBtn').addEventListener('click', loadButton);
+
+    let inputs = document.getElementsByTagName('INPUT'),
+      len = inputs.length;
+
+    window.setInterval(() => {
+      for (let c = 0; c < len; c++) {
+        let boolean = inputs[c].value.length;
+        switch (true) {
+          case boolean < 7:
+            inputs[c].style.background = '#adf';
+            break;
+          case boolean == 7:
+            inputs[c].style.background = '#0f0';
+            break;
+          default:
+            inputs[c].style.background = '#f00';
+        }
+      }
+    }, 500);
+
+    let timing = () => {
+      let d = new Date(),
+        h = d.getHours(),
+        m = d.getMinutes(),
+        soldier = h + m,
+        el = document.getElementById('hervisLogo');
+      //        h = 10;
+      //        m = 0;
+      if (h < 10) {
+        el.style.filter = 'blur(8px)';
+      } else if (h > 9 && h < 21) {
+        let all = ((((h * 60) + m) - (10 * 60)) / 6),
+          renov = (h - 10) * (8 / 10);
+        if (h > 13) {
+          all = all - 9.833;
+          el.style.marginLeft = 'calc(' + all + '%' + ' - ' + renov + 'vw)';
+        } else {
+          el.style.marginLeft = 'calc(' + all + '%' + ' - ' + renov + 'vw)';
+        }
+      } else {
+        el.style.filter = 'blur(8px)';
+      }
+      window.setTimeout(timing, (1000 * 60));
+    }
+    timing();
+
+    document.getElementById('hervisLogo').addEventListener('click', () => {
+      const array = [3057624, 2719580, 3228253, 3153969, 3159306],
+        l = array.length;
+      for (let i = 0; i < document.getElementsByTagName('INPUT').length; i++) {
+        document.getElementsByTagName('INPUT')[i].value = array[i];
+      }
+      //loadButton();
+    });
+
+
+    console.log('Loaded successfully;');
+  </script>
+</body>
+
+</html>
