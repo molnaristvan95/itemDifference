@@ -26,6 +26,7 @@
       background: #000;
       padding: 0;
       margin: 0;
+      position: relative;
     }
 
     #hervisLogo {
@@ -137,6 +138,19 @@
       height: 100%;
       margin: 0;
     }
+
+    article {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 100%;
+      z-index: -1;
+      margin: 0;
+      background: repeating-linear-gradient(to right, #0000 0% 9.09%, #0f0 9.09% 9.2%);
+      backgroun: yellow;
+    }
   </style>
 </head>
 
@@ -156,6 +170,7 @@
   </nav>
   <section id="embed">
   </section>
+  <article>asd</article>
   <script type="text/javascript">
     console.clear();
     console.log(new Date());
@@ -245,6 +260,18 @@
       }
       //loadButton();
     });
+
+    //    ( () => {
+    //      let art = document.getElementsByTagName('ARTICLE'),
+    //            part = 10,
+    //            pixel = screen.width / part,
+    //            str = '';
+    //      for (let y = 0; y < part; y++) {
+    //        str += '#0000 ' + (pixel - screen.width / part) + 'px ' + pixel + ', #0f0 ' + (pixel + 2) + 'px, ';
+    //      }
+    //      art[0].style.background = 'repeating-linear-gradient(to right, ' + str + ')';
+    //      //console.log(str);
+    //    })();
 
 
     console.log('Loaded successfully;');
